@@ -1,3 +1,3 @@
 library dart_datakit;
 
-export 'src/datakat.dart';
+export 'src/datacat.dart';
