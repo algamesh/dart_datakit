@@ -1,6 +1,6 @@
 name: dart_datakit
-description: A pure Dart data manipulation library with a DataKat-like structure.
-version: 0.0.1
+description: Data manipulation library.
+version: 1.0.1
 homepage: https://github.com/yourusername/dart_datakit
 repository: https://github.com/yourusername/dart_datakit
 issue_tracker: https://github.com/yourusername/dart_datakit/issues
