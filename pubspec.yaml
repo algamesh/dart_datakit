@@ -1,16 +1,14 @@
 name: dart_datakit
 description: A pure Dart data manipulation library with a DataKat-like structure.
-version: 0.1.0
+version: 0.0.1
 homepage: https://github.com/yourusername/dart_datakit
 repository: https://github.com/yourusername/dart_datakit
 issue_tracker: https://github.com/yourusername/dart_datakit/issues
 
 environment:
-  sdk: ">=2.17.0 <3.0.0"
+  sdk: '>=2.17.0 <4.0.0'
 
-# Add dependencies here if needed
 dependencies:
-  # e.g. json_annotation: ^4.7.0
 
 dev_dependencies:
   test: any
