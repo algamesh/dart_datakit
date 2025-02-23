@@ -1,24 +1,24 @@
 import 'dart:convert';
 
 /// A simplified data manipulation structure in Dart.
-class DataKat {
+class DataCat {
   List<String> columns;
   List<List<dynamic>> rows;
 
-  DataKat({
+  DataCat({
     required this.columns,
     required this.rows,
   }) {
     _normalizeRows();
   }
 
-  factory DataKat.fromJsonString(String jsonString) {
+  factory DataCat.fromJsonString(String jsonString) {
     final decoded = json.decode(jsonString);
     if (decoded is! List) {
       throw ArgumentError('JSON input must be a list/array of objects');
     }
     if (decoded.isEmpty) {
-      return DataKat(columns: [], rows: []);
+      return DataCat(columns: [], rows: []);
     }
     final allKeys = <String>{};
     for (final item in decoded) {
@@ -35,13 +35,13 @@ class DataKat {
         rowList.add(row);
       }
     }
-    return DataKat(columns: colList, rows: rowList);
+    return DataCat(columns: colList, rows: rowList);
   }
 
-  factory DataKat.fromCsvString(String csvString) {
+  factory DataCat.fromCsvString(String csvString) {
     final lines = csvString.trim().split('\n');
     if (lines.isEmpty) {
-      return DataKat(columns: [], rows: []);
+      return DataCat(columns: [], rows: []);
     }
     final colList = lines.first.split(',');
     final rowList = <List<dynamic>>[];
@@ -49,24 +49,24 @@ class DataKat {
       final fields = lines[i].split(',');
       rowList.add(fields);
     }
-    return DataKat(columns: colList, rows: rowList);
+    return DataCat(columns: colList, rows: rowList);
   }
 
-  DataKat head([int n = 5]) {
+  DataCat head([int n = 5]) {
     final limitedRows = rows.take(n).toList();
-    return DataKat(columns: List.from(columns), rows: limitedRows);
+    return DataCat(columns: List.from(columns), rows: limitedRows);
   }
 
-  DataKat tail([int n = 5]) {
+  DataCat tail([int n = 5]) {
     if (rows.isEmpty) {
-      return DataKat(columns: List.from(columns), rows: []);
+      return DataCat(columns: List.from(columns), rows: []);
     }
     final start = rows.length - n < 0 ? 0 : rows.length - n;
     final limitedRows = rows.sublist(start);
-    return DataKat(columns: List.from(columns), rows: limitedRows);
+    return DataCat(columns: List.from(columns), rows: limitedRows);
   }
 
-  DataKat selectColumns(List<String> selectedCols) {
+  DataCat selectColumns(List<String> selectedCols) {
     final colIndexMap = <String, int>{};
     for (int i = 0; i < columns.length; i++) {
       colIndexMap[columns[i]] = i;
@@ -85,15 +85,15 @@ class DataKat {
       }
       newRows.add(subRow);
     }
-    return DataKat(columns: selectedCols, rows: newRows);
+    return DataCat(columns: selectedCols, rows: newRows);
   }
 
-  DataKat dropColumns(List<String> dropCols) {
+  DataCat dropColumns(List<String> dropCols) {
     final keepCols = columns.where((c) => !dropCols.contains(c)).toList();
     return selectColumns(keepCols);
   }
 
-  DataKat filterRows(bool Function(Map<String, dynamic> rowMap) test) {
+  DataCat filterRows(bool Function(Map<String, dynamic> rowMap) test) {
     final filteredRows = <List<dynamic>>[];
     for (final row in rows) {
       final rowMap = _rowToMap(row);
@@ -101,7 +101,7 @@ class DataKat {
         filteredRows.add(row);
       }
     }
-    return DataKat(columns: List.from(columns), rows: filteredRows);
+    return DataCat(columns: List.from(columns), rows: filteredRows);
   }
 
   void addColumn(String columnName,
