@@ -2,9 +2,9 @@ import 'package:dart_datakit/dart_datakit.dart';
 import 'package:test/test.dart';
 
 void main() {
-  group('DataCat Tests', () {
+  group('Datacat Tests', () {
     test('Initialization', () {
-      final dk = DataCat(columns: [
+      final dk = Datacat(columns: [
         'col1',
         'col2'
       ], rows: [
@@ -19,7 +19,7 @@ void main() {
 
     test('fromJsonString', () {
       final jsonString = '[{"col1":1,"col2":2},{"col1":3,"col2":4}]';
-      final dk = DataCat.fromJsonString(jsonString);
+      final dk = Datacat.fromJsonString(jsonString);
       expect(dk.columns, containsAll(['col1', 'col2']));
       expect(dk.rows.length, equals(2));
     });
