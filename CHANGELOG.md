@@ -1,3 +1,6 @@
+## [1.1.1+2] - 2025-02-23
+- all references 'DataCat' to 'Datacat'
+
 ## [1.1.1+1] - 2025-02-23
 - all references are renamed to use 'datacat'
 
