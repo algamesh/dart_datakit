@@ -1,6 +1,6 @@
 name: dart_datakit
 description: Data manipulation library.
-version: 1.1.1+2
+version: 1.1.2
 homepage: https://github.com/algamesh/dart_datakit
 repository: https://github.com/algamesh/dart_datakit
 issue_tracker: https://github.com/algamesh/dart_datakit/issues

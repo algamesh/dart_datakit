@@ -1,4 +1,4 @@
-import 'package:dart_datakit/dart_datakit.dart';
+import '../lib/dart_datakit.dart';
 
 void main() {
   // Create a Datacat instance with sample data.
