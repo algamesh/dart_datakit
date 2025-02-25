@@ -1,3 +1,6 @@
+## [1.1.3] - 2025-02-24
+- reads in json map
+
 ## [1.1.2] - 2025-02-24
 - fix example code
 

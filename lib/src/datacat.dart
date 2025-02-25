@@ -12,6 +12,7 @@ class Datacat {
     _normalizeRows();
   }
 
+  /// Creates a Datacat from a JSON string that represents a list of objects.
   factory Datacat.fromJsonString(String jsonString) {
     final decoded = json.decode(jsonString);
     if (decoded is! List) {
@@ -36,6 +37,41 @@ class Datacat {
       }
     }
     return Datacat(columns: colList, rows: rowList);
+  }
+
+  /// Creates multiple Datacat instances from a JSON string that represents
+  /// a map whose keys are table names and whose values are lists of objects.
+  static Map<String, Datacat> fromJsonMapString(String jsonString) {
+    final decoded = json.decode(jsonString);
+    if (decoded is! Map) {
+      throw ArgumentError(
+          'JSON input must be a map with table names as keys and list values');
+    }
+    final result = <String, Datacat>{};
+    decoded.forEach((tableName, tableData) {
+      if (tableData is List) {
+        final allKeys = <String>{};
+        for (final item in tableData) {
+          if (item is Map) {
+            allKeys.addAll(item.keys.map((k) => k.toString()));
+          }
+        }
+        final colList = allKeys.toList();
+
+        final rowList = <List<dynamic>>[];
+        for (final item in tableData) {
+          if (item is Map) {
+            final row = colList.map((colName) => item[colName]).toList();
+            rowList.add(row);
+          }
+        }
+        result[tableName] = Datacat(columns: colList, rows: rowList);
+      } else {
+        throw ArgumentError(
+            'Table data for "$tableName" must be a list of objects');
+      }
+    });
+    return result;
   }
 
   factory Datacat.fromCsvString(String csvString) {
