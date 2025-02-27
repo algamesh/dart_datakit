@@ -1,3 +1,6 @@
+## [1.2.0] - 2025-02-26
+- introduce datakitties and the use of catalgues in reference of datacats
+
 ## [1.1.3] - 2025-02-24
 - reads in json map
 
