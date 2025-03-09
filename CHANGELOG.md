@@ -1,5 +1,9 @@
+## [1.3.0] - 2025-03-08
+- removes datakitties
+- includes various data catalogue components and functionalities
+
 ## [1.2.0] - 2025-02-26
-- introduce datakitties and the use of catalgues in reference of datacats
+- introduce datakitties and the use of catalogues in reference of datacats
 
 ## [1.1.3] - 2025-02-24
 - reads in json map
