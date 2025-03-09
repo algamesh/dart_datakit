@@ -39,9 +39,9 @@ void main() {
   print('Summary statistics:');
   print(datacat.describe());
 
-  // Pivot table example:
+  // Pivot Datacat example:
   final pivoted = Pivots.pivot(datacat, 'id', 'name', 'value');
-  print('Pivoted Table:');
+  print('Pivoted Datacat:');
   print(pivoted);
 
   // Demonstrate schema enforcement:

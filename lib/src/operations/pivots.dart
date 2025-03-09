@@ -1,8 +1,8 @@
 import '../core/datacat.dart';
 
-/// Provides pivot table functionality.
+/// Provides pivot Datacat functionality.
 class Pivots {
-  /// Creates a pivot table from [datacat] using [indexColumn] for rows,
+  /// Creates a pivot Datacat from [datacat] using [indexColumn] for rows,
   /// [pivotColumn] for new column headers, and [valueColumn] for values.
   /// Aggregates values using sum.
   static Datacat pivot(Datacat datacat, String indexColumn, String pivotColumn,
