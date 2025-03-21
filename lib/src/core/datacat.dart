@@ -2,12 +2,13 @@ import 'dart:convert';
 import 'datacat_schema.dart';
 
 /// A versatile data structure resembling a DataFrame.
-/// It holds column names and rows of data, and it can enforce a schema.
+/// It holds column names and rows of data and can optionally enforce a schema.
+/// It also provides static methods to create nested Datacats from JSON.
 class Datacat {
   List<String> columns;
   List<List<dynamic>> rows;
 
-  /// Optional schema that enforces required columns and types.
+  /// Optional schema for enforcing required columns and cell types.
   DatacatSchema? _schema;
 
   Datacat({
@@ -18,8 +19,8 @@ class Datacat {
   }
 
   /// Creates a Datacat that enforces the provided [schema].
-  /// The columns will be set to the keys in the schema.
-  /// Throws an error if the provided rows do not conform to the schema.
+  /// The columns are set to the keys from [schema.requiredColumns].
+  /// Throws an error if the provided rows do not conform.
   Datacat.withSchema({
     required DatacatSchema schema,
     required List<List<dynamic>> rows,
@@ -31,7 +32,7 @@ class Datacat {
     _verifySchemaTypes();
   }
 
-  /// Adds a new row and verifies it against the schema if defined.
+  /// Adds a new row. Throws if the row length doesn't match [columns].
   void addRow(List<dynamic> row) {
     if (row.length != columns.length) {
       throw ArgumentError(
@@ -43,8 +44,7 @@ class Datacat {
     }
   }
 
-  /// Updates a cell at [rowIndex] in column [columnName] with [newValue],
-  /// then checks the schema.
+  /// Updates a cell at [rowIndex] in column [columnName] with [newValue].
   void updateCell(int rowIndex, String columnName, dynamic newValue) {
     int colIndex = columns.indexOf(columnName);
     if (colIndex == -1)
@@ -64,12 +64,12 @@ class Datacat {
     }
   }
 
-  /// Returns a new Datacat with the first [n] rows.
+  /// Returns a new Datacat containing the first [n] rows.
   Datacat head([int n = 5]) {
     return Datacat(columns: List.from(columns), rows: rows.take(n).toList());
   }
 
-  /// Returns a new Datacat with the last [n] rows.
+  /// Returns a new Datacat containing the last [n] rows.
   Datacat tail([int n = 5]) {
     if (rows.isEmpty) return Datacat(columns: List.from(columns), rows: []);
     int start = rows.length - n;
@@ -84,9 +84,8 @@ class Datacat {
       if (index == -1) throw ArgumentError('Column "$col" not found.');
       return index;
     }).toList();
-    List<List<dynamic>> newRows = rows.map((row) {
-      return indices.map((i) => row[i]).toList();
-    }).toList();
+    List<List<dynamic>> newRows =
+        rows.map((row) => indices.map((i) => row[i]).toList()).toList();
     return Datacat(columns: selectedColumns, rows: newRows);
   }
 
@@ -116,7 +115,7 @@ class Datacat {
     return Datacat(columns: List.from(columns), rows: sortedRows);
   }
 
-  /// Groups rows by the given column and returns a Map from key to Datacat.
+  /// Groups rows by the given column and returns a Map from the group key to a Datacat.
   Map<dynamic, Datacat> groupBy(String columnName) {
     int index = columns.indexOf(columnName);
     if (index == -1) throw ArgumentError('Column "$columnName" not found.');
@@ -130,7 +129,7 @@ class Datacat {
   }
 
   /// Computes summary statistics for numeric columns.
-  /// Returns a map with each numeric column mapped to count, sum, mean, min, and max.
+  /// Returns a map mapping each numeric column to a map of count, sum, mean, min, and max.
   Map<String, Map<String, num>> describe() {
     Map<String, Map<String, num>> summary = {};
     for (int i = 0; i < columns.length; i++) {
@@ -192,7 +191,7 @@ class Datacat {
     }
   }
 
-  /// Verifies that the values in a [row] match the schema type definitions.
+  /// Verifies that the values in a row match the schema's type definitions.
   void _verifyRowTypes(List<dynamic> row) {
     final schemaColumns = _schema!.requiredColumns;
     for (int i = 0; i < columns.length; i++) {
@@ -208,7 +207,7 @@ class Datacat {
     }
   }
 
-  /// Normalizes each row to have the same number of elements as [columns].
+  /// Normalizes each row so that its length matches the number of columns.
   void _normalizeRows() {
     int colCount = columns.length;
     for (int i = 0; i < rows.length; i++) {
@@ -270,9 +269,10 @@ class Datacat {
     return Datacat(columns: colList, rows: rowList);
   }
 
-  /// Creates nested Datacats from a JSON string representing a map
+  /// Creates nested Datacats from a JSON string representing a map,
   /// where each key maps to a list of objects.
-  factory Datacat.fromJsonMapString(String jsonString) {
+  /// Returns a Map<String, Datacat>.
+  static Map<String, Datacat> fromJsonMapString(String jsonString) {
     final decoded = json.decode(jsonString);
     if (decoded is! Map) {
       throw ArgumentError(
@@ -286,8 +286,6 @@ class Datacat {
         throw ArgumentError('Value for key "$key" must be a list.');
       }
     });
-    // Return a Datacat whose columns are the keys (names of nested tables)
-    // and no rows. Adjust as needed.
-    return Datacat(columns: result.keys.toList(), rows: []);
+    return result;
   }
 }

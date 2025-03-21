@@ -1,3 +1,6 @@
+## [1.3.1] - 2025-03-08
+- update datacat parse from json logic
+
 ## [1.3.0] - 2025-03-08
 - removes datakitties
 - includes various data catalogue components and functionalities
